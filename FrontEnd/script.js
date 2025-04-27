@@ -1,19 +1,23 @@
+const api = 'http://127.0.0.1:5001/';
+
 async function sendMessage() {
     const userInput = document.getElementById("userInput");
     const message = userInput.value.trim();
     if (message === "") return;
+    console.log(message);
 
     addMessage(message, 'd-flex justify-content-end');
     userInput.value = "";
 
-    const response = await fetch('/ask', {
+    const response = await fetch(api + 'send-prompt', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ query: message })
     });
+    console.log(response);
 
     const data = await response.json();
-    addMessage(data.reply, 'd-flex justify-content-start');
+    addMessage(data.response, 'd-flex justify-content-start');
 }
 
 function addMessage(text, alignmentClass) {
