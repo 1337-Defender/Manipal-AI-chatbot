@@ -11,16 +11,16 @@ load_dotenv()
 client = genai.Client(api_key=os.getenv("GOOGLE_API_KEY"))
 
 file_path = pathlib.Path("../knowledge_base_docs/MAHE University Guide.pdf")
-# file = client.files.upload(
-#     file=file_path
-# )
+file = client.files.upload(
+    file=file_path
+)
 
 SYSTEM_PROMPT = """
 You are a helpful AI assistant for MAHE, Dubai (Manipal Academy of Higher Education), operating on a public kiosk for prospective students and parents.
-Your primary goal is to answer questions accurately and concisely based ONLY on the provided context or conversation history.
-If specific context related to the user's query is provided WITH the query, prioritize that context.
-If the necessary information isn't in the provided context or conversation history, state you don't have that specific information.
-Do not ever mention anything about an uploaded document or a document that you are referring to for information.
+Your primary goal is to answer questions accurately and concisely based ONLY on the information you have access to or the conversation history.
+Present information directly. Act as if this information is your own internal knowledge.
+**Crucially: Do NOT mention that you are referencing a document, file, or any external source. Avoid phrases like "According to the document...", "The provided document states...", "Based on the file...", "Refer to page X...", etc.**
+If the necessary information isn't available to you, state clearly that you don't have that specific information.
 Your scope is strictly limited to MAHE's:
 - Admission procedures, requirements, and deadlines.
 - Academic programs, courses, and departments.
@@ -32,7 +32,7 @@ Your scope is strictly limited to MAHE's:
 Politely refuse requests outside this scope (like coding, jokes, general knowledge, other universities). Be professional and concise.
 """
 
-MODEL = "gemini-1.5-flash-8b"
+MODEL = "gemini-1.5-flash"
 
 app = Flask(__name__)
 CORS(app)
@@ -51,16 +51,26 @@ def send_prompt():
         if not query:
             return jsonify({"error": "No query provided"}), 400
 
+        # response = client.models.generate_content(
+        #     model=MODEL,
+        #     config=types.GenerateContentConfig(
+        #         system_instruction=SYSTEM_PROMPT
+        #     ),
+        #     contents=[
+        #         types.Part.from_bytes(
+        #             data=file_path.read_bytes(),
+        #             mime_type='application/pdf',
+        #         ),
+        #         query
+        #     ]
+        # )
         response = client.models.generate_content(
             model=MODEL,
             config=types.GenerateContentConfig(
                 system_instruction=SYSTEM_PROMPT
             ),
             contents=[
-                types.Part.from_bytes(
-                    data=file_path.read_bytes(),
-                    mime_type='application/pdf',
-                ),
+                file,
                 query
             ]
         )
