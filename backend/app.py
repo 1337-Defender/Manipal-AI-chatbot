@@ -4,6 +4,7 @@ from google.genai import types
 import os
 from dotenv import load_dotenv
 import pathlib
+from flask_cors import CORS
 
 load_dotenv()
 
@@ -34,6 +35,8 @@ Politely refuse requests outside this scope (like coding, jokes, general knowled
 MODEL = "gemini-1.5-flash-8b"
 
 app = Flask(__name__)
+CORS(app)
+cors = CORS(app, resources={r"/*": {"origins": "localhost"}})
 
 @app.route("/")
 def hello():
