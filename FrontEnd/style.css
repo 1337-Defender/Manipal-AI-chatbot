@@ -1,0 +1,27 @@
+body, html {
+    height: 100%;
+}
+#chatContainer::-webkit-scrollbar {
+    width: 6px;
+}
+#chatContainer::-webkit-scrollbar-thumb {
+    background: #6c757d;
+    border-radius: 3px;
+}
+.rainbow-text {
+    background-image: linear-gradient(270deg, red, orange, yellow, green, blue, indigo, violet);
+    background-size: 400% 400%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -moz-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: rainbow 8s ease infinite;
+    font-weight: bold;
+    font-size: 3rem;
+    font-family: Arial, Helvetica, sans-serif;
+}
+@keyframes rainbow {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
