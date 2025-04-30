@@ -17,7 +17,7 @@ body, html {
     -webkit-text-fill-color: transparent;
     animation: rainbow 8s ease infinite;
     font-weight: bold;
-    font-size: 3rem;
+    font-size: 2rem;
     font-family: Arial, Helvetica, sans-serif;
 }
 @keyframes rainbow {
